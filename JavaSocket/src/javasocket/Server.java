@@ -4,18 +4,39 @@
  * and open the template in the editor.
  */
 package javasocket;
-
+import java.net.*;
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author carlucci.cristian
  */
-public class JavaSocket {
+public class Server {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        try {
+            ServerSocket serverSocket = new ServerSocket(5000);
+            Socket clientSocket= serverSocket.accept();
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            String greeting = in.readLine();
+            if ("hello server".equals(greeting)) {
+                out.println("hello client");
+            }
+            else {
+                out.println("unrecognised greeting");
+            }
+            in.close();
+        out.close();
+        clientSocket.close();
+        serverSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
